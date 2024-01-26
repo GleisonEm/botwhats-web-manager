@@ -2,7 +2,7 @@ import { makeStyles } from "@mui/styles";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { GETPOST } from "../ApiUrl";
+import { GETPOST } from "../services/ApiUrl";
 import { themes } from "../Helpers/Theme";
 
 const PostDetails = () => {

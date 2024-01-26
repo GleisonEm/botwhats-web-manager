@@ -27,7 +27,7 @@ function App() {
         <div className="App">
           <nav>
             <Link to="/" className="logo">
-              <h3>BlogDaily</h3>
+              <h3>Bot-Manager</h3>
             </Link>
             <ul>
               <li>
@@ -53,7 +53,7 @@ function App() {
               path="/login"
               element={<Login setIsLogged={setIsLogged} />}
             />
-            <Route path="/" exact element={<Home isLogged={isLogged} />} />
+            <Route path="/" exact element={isLogged ? <Home isLogged={isLogged} /> : <Login setIsLogged={setIsLogged} />} />
             <Route path="/posts" exact element={<PostDetails />} />
             <Route path="/posts/:id" element={<PostDetails />} />
           </Routes>

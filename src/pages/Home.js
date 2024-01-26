@@ -1,11 +1,13 @@
 import { Grid, Modal, Box, TextField, Typography } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+import { makeStyles, styled } from "@mui/styles";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CREATEPOST, GETPOSTS } from "../ApiUrl";
+import { CREATEPOST, GETPOSTS } from "../services/ApiUrl";
 import Card from "../Components/Card";
 import { themes } from "../Helpers/Theme";
+import GroupSelect from "../Components/Groups";
+import MediaUploader from "../Components/MediaUploader";
 
 const Home = ({ isLogged }) => {
   const HomeStyles = makeStyles((theme) => ({
@@ -26,6 +28,12 @@ const Home = ({ isLogged }) => {
       backgroundColor: themes.palette.primary.white,
       boxShadow: 24,
       padding: "20px 15px",
+      overflowY: "scroll",
+      scrollbarWidth: 'none', /* para navegadores Firefox */
+      msOverflowStyle: 'none',
+      '&::-webkit-scrollbar': { /* para navegadores Chrome, Safari, Opera */
+        display: 'none',
+      },
       [theme.breakpoints.down("sm")]: {
         width: "80%",
         height: "80%",
@@ -105,9 +113,12 @@ const Home = ({ isLogged }) => {
 
   useEffect(() => {
     const fetchPosts = async () => {
+      let posts = []
       const getPosts = await axios.get(GETPOSTS);
-      const response = getPosts.data;
-      setAllPosts(response);
+      if (response.status == 200) {
+        posts = getPosts.data;
+      }
+      setAllPosts(posts);
     };
     fetchPosts();
   }, []);
@@ -157,7 +168,7 @@ const Home = ({ isLogged }) => {
       <div>
         <div className={classes.titleDiv}>
           <div>
-            <p className={classes.text}>Popular posts from BlogDaily</p>
+            {/* <p className={classes.text}>Popular posts from BlogDaily</p> */}
           </div>
           <div>
             <button className={classes.buttonStyles} onClick={handleOpen}>
@@ -169,8 +180,10 @@ const Home = ({ isLogged }) => {
         <Modal open={open} onClose={handleClose}>
           <Box className={classes.modalstyle}>
             <div className={classes.textDiv}>
+              <GroupSelect />
+
               <Typography className={classes.spaceY} variant="h5">
-                Title
+                Título
               </Typography>
               <TextField
                 id="outlined-basic"
@@ -180,7 +193,7 @@ const Home = ({ isLogged }) => {
                 onChange={(e) => setTitle(e.target.value)}
               />
               <Typography className={classes.spaceY} variant="h5">
-                Body
+                Conteúdo
               </Typography>
               <TextField
                 id="outlined-multiline-static"
@@ -191,6 +204,13 @@ const Home = ({ isLogged }) => {
                 placeholder="write a post..."
                 className={classes.input}
               />
+              <>
+                <Typography className={classes.spaceY} variant="h5">
+                  Anexo de Mídias
+                </Typography>
+                <MediaUploader />
+              </>
+
             </div>
             <div>
               <button
